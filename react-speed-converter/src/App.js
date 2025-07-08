@@ -1,6 +1,19 @@
 import './App.css';
+import { useState } from 'react';
+
 
 function App() {   
+
+let [val,setVal] = useState(0)
+
+const setMbps = function(){
+
+   
+  setVal(x=> x+1)
+
+}
+
+
   return (
 <div className="container">
   <div className="card-header">Network Speed Converter</div>
@@ -16,14 +29,14 @@ function App() {
     <div className="converter">
       <div className="flex-1">
         <div className="converter-title">Set</div>
-        <input type="number" className="input-number" min="0" />
+        <input type="number" className="input-number" min="0" onChange={setMbps} />
       </div>
       <span className="angle-icon fa-2x" style={{marginTop: '30px'}}>
         <i className="fas fa-angle-right" ></i>
       </span>
       <div className="text-right flex-1">
         <div className="converter-title">Show</div>
-        <input type="text" className="input-number text-right" disabled value="125" />
+        <input type="text" className="input-number text-right" disabled value={val} />
       </div>
     </div>
   </div>
