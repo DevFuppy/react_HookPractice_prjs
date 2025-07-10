@@ -40,7 +40,7 @@ const setMbps = function(e){
       </div>
     </div>
   </div>
-  <B />
+  <B value={val} />
 </div>
   );
 }
