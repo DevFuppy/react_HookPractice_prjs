@@ -13,8 +13,6 @@ const setMbps = function(e){
   //  為什麼單純用val是吃到閉包?
   // setVal(x=> x+1)
 
-  // console.log(e.target.value)
-
   setVal(x=> e.target.value)
 
 }
