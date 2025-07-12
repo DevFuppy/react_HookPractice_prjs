@@ -5,6 +5,7 @@ const Footer = function({value}){
     //console.log(value) 每次更新數值這邊會調用兩次，為什麼?
     
    return (<div className="card-footer" style={{backgroundColor:color}} >{speed}</div>)
+   
 
 }
 
