@@ -3,6 +3,7 @@ import { useState } from 'react';
 import A from './components/unitControl' 
 import {Footer as B}  from './components/footer'  
 import Converter from './components/Converter'
+import fas from '@fortawesome/fontawesome-svg-core'
 
 function App() {   
 
