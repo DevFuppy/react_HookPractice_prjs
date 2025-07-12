@@ -10,3 +10,4 @@ const Footer = function({value}){
 }
 
 export {Footer}
+
