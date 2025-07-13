@@ -19,21 +19,21 @@ background-color: #ededed;
 const WeatherCard = styled.div`
   position: relative;
   min-width: 360px;
-  box-shadow: 0 1px 3px 0 #999999;
-  background-color: #f9f9f9;
+  box-shadow: ${({theme:{boxShadow}})=>boxShadow};
+  background-color: ${({theme:{backgroundColor}})=>backgroundColor};
   box-sizing: border-box;
   padding: 30px 15px;
 `;
 
 const Location = styled.div`
   font-size: ${prop=> prop.theme === 11?'128px':'28px'};  
-  color: #212121;
+  color: ${({theme:{titleColor}})=>titleColor};
   margin-bottom: 20px;
 `;
 
 const Description = styled.div`
   font-size: 16px;
-  color: #828282;
+  color: ${({theme:{textColor}})=>textColor};
   margin-bottom: 30px;
 `;
 
@@ -61,7 +61,7 @@ const AirFlow = styled.div`
   align-items: center;
   font-size: 16x;
   font-weight: 300;
-  color: #828282;
+  color: ${({theme:{textColor}})=>textColor};
   margin-bottom: 20px;
 
   svg {
@@ -79,7 +79,7 @@ const Rain = styled.div`
   align-items: center;
   font-size: 16x;
   font-weight: 300;
-  color: #828282;
+  color: ${({theme:{textColor}})=>textColor};
 
   svg {
   
@@ -92,6 +92,7 @@ const Rain = styled.div`
 
 `;
 
+//Q: SVG直接等於一類DOM嗎? 為何可以直接這樣寫?
 const Refresh = styled.div`
   position: absolute;
   right: 15px;
@@ -99,7 +100,7 @@ const Refresh = styled.div`
   font-size: 12px;
   display: inline-flex;
   align-items: flex-end;
-  color: #828282;
+  color:${({theme:{textColor}})=>textColor};
 
   svg {
   
