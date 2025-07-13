@@ -7,12 +7,13 @@ import AirFlowIcon from "./images/airFlow.svg?react";
 import RainIcon from "./images/rain.svg?react";
 
 const Container = styled.div`
-  background-color: #ededed;
+background-color: #ededed; 
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; 
 `;
+
 
 const WeatherCard = styled.div`
   position: relative;
@@ -24,7 +25,7 @@ const WeatherCard = styled.div`
 `;
 
 const Location = styled.div`
-  font-size: ${prop=> prop.theme === 11?'28px':'128px'};  
+  font-size: ${prop=> prop.theme === 11?'128px':'28px'};  
   color: #212121;
   margin-bottom: 20px;
 `;
@@ -116,11 +117,38 @@ const DayCloudy = styled(DayCloudyIcon)`
 
 `;
 
+
+const theme = {
+  light: {
+    backgroundColor: '#ededed',
+    foregroundColor: '#f9f9f9',
+    boxShadow: '0 1px 3px 0 #999999',
+    titleColor: '#212121',
+    temperatureColor: '#757575',
+    textColor: '#828282',
+  },
+  dark: {
+    backgroundColor: '#1F2022',
+    foregroundColor: '#121416',
+    boxShadow:
+      '0 1px 4px 0 rgba(12, 12, 13, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.15)',
+    titleColor: '#f9f9fa',
+    temperatureColor: '#dddddd',
+    textColor: '#cccccc',
+  },
+};
+
+const ContainerX = styled(Container)`
+
+${p=>p.theme === 'dark'? theme.dark: theme.light}
+
+`
+
 function App() {
   return (
-    <Container>
+    <ContainerX theme='dark'>
       <WeatherCard>
-        <Location theme={11} dim='23'>台北市</Location>
+        <Location>台北市</Location>
         <Description>多雲時晴</Description>
         <CurrentWeather>
           <Temperature>
@@ -144,7 +172,7 @@ function App() {
           <RefreshIcon />{" "}
         </Refresh>
       </WeatherCard>
-    </Container>
+    </ContainerX>
   );
 }
 

@@ -1,8 +1,13 @@
+- installing @emotion and @normalize
+    - cmd: npm install --save normalize.css
+    - App.jsx: import "normalize.css";
+    - cmd: npm install @emotion/styled @emotion/react
+    - App.jsx: import styled from "@emotion/styled";
+
 - importing SVG as components needs to install plugin
     - SVGR: 
         - npm install -D vite-plugin-svgr
         - import svgr from 'vite-plugin-svgr' (vite.config.js);
-        -  pligins :[.....   ,svgr({
-      // 啟用 ?component 查詢字串機制
-      exportAsDefault: false
-    })
+        - plugins :[.....   ,svgr()...
+        - when importing svg as a component, the url needs to add '?react' at the end
+            -e.g. import DayCloudyIcon from "./images/day-cloudy.svg?react";
