@@ -3,6 +3,8 @@
     - App.jsx: import "normalize.css";
     - cmd: npm install @emotion/styled @emotion/react
     - App.jsx: import styled from "@emotion/styled";
+    - import { ThemeProvider } from "@emotion/react";
+        - `<ThemeProvider theme={theme}>` (only accept object)
 
 - importing SVG as components needs to install plugin
     - SVGR: 

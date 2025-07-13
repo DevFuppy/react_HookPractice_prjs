@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "normalize.css";
 import styled from "@emotion/styled";
+import { ThemeProvider } from "@emotion/react";
 import DayCloudyIcon from "./images/day-cloudy.svg?react";
 import RefreshIcon from "./images/refresh.svg?react";
 import AirFlowIcon from "./images/airFlow.svg?react";
@@ -139,14 +140,22 @@ const theme = {
 };
 
 const ContainerX = styled(Container)`
-
-${p=>p.theme === 'dark'? theme.dark: theme.light}
-
+  background-color : ${({theme:{backgroundColor}})=> backgroundColor}
 `
 
+
+// ${p=>p.theme === 'dark'? theme.dark: theme.light}
+
+
 function App() {
+
+  const [t,setT] = useState('dark')
+
+  console.log(t)
+
   return (
-    <ContainerX theme='dark'>
+    <ThemeProvider theme={theme[t]}>
+    <ContainerX >
       <WeatherCard>
         <Location>台北市</Location>
         <Description>多雲時晴</Description>
@@ -173,6 +182,7 @@ function App() {
         </Refresh>
       </WeatherCard>
     </ContainerX>
+    </ThemeProvider>
   );
 }
 
