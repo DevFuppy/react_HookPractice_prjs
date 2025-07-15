@@ -7,6 +7,7 @@ import RefreshIcon from "./images/refresh.svg?react";
 import AirFlowIcon from "./images/airFlow.svg?react";
 import RainIcon from "./images/rain.svg?react";
 
+
 const Container = styled.div`
 background-color: #ededed; 
   height: 100%;
