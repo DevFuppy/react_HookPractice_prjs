@@ -109,9 +109,24 @@ const Refresh = styled.div`
   width: 15px;
   height: 15px;
   margin-left:10px;
-  cursor: pointer
-  
+  cursor: pointer;
+  ${({Loading})=>Loading?'animation: rotate 1.5s infinite linear':''}
   }
+
+@keyframes rotate {
+  
+  from{
+
+    transform:rotate(360deg)
+
+  }
+  to{
+
+    transform:rotate(0deg)
+
+  }
+
+}
 
 `;
 
@@ -148,21 +163,23 @@ const ContainerX = styled(Container)`
 const auth = 'CWA-6223B667-3D20-4930-B865-47C2562798D1'
 
 const oriData = {
-locationName: 'Taipei',
-weather: '不支倒ˋ',
-windSpeed: 'unkown',
-airTemperature: 'kk',
-description:'描述氣溫?',
-PoP: 100,
-ObTime: '上午 12：03'
+locationName: '',
+weather: '',
+windSpeed: '',
+airTemperature: '',
+description:'',
+PoP: 0,
+ObTime: '上午 00：00',
+isLoading:true
 
   }
 
 function App() {
 
-console.log('invoke function component')
 
 const fetchCurrentWeather = async ()=>{
+
+  setW(x=>({...x, isLoading:true}))
 
   const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${auth}&StationName=%E8%87%BA%E5%8C%97`);
 
@@ -177,44 +194,50 @@ const fetchCurrentWeather = async ()=>{
 
   // console.log(result);
 
-
- let newData =  {...oriData,
+  setW(prev=>({...prev,
     locationName: CountyName,
 weather: Weather,
 windSpeed: WindSpeed,
 airTemperature: Math.round(AirTemperature), 
-ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3)  
+ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3),  
+isLoading:false
+  }))
 
-  } 
-
-
-  setW({...newData})
+  
 
 }
 
 
   const [t,setT] = useState('dark')
-  const [w,setW] = useState(oriData)
+  const [{
+locationName,
+weather,
+windSpeed,
+airTemperature,
+description,
+PoP,
+ObTime,isLoading
+  },setW] = useState(oriData)
   
   useEffect(()=>{
     
+    
     fetchCurrentWeather();
 
-    console.log('useEffect functioin')
+ 
   
   },[])
 
 
   return (
     <ThemeProvider theme={theme[t]}>
-    <ContainerX >
+    <ContainerX > 
       <WeatherCard>
-        {console.log('return component')}
-        <Location>{w.locationName}</Location>
-        <Description>{w.description}</Description>
+        <Location>{locationName}</Location>
+        <Description>{description}</Description>
         <CurrentWeather>
           <Temperature>
-            {w.airTemperature}
+            {airTemperature}
             <Celsius>°C</Celsius>
           </Temperature>
 
@@ -222,15 +245,15 @@ ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3)
         </CurrentWeather>
         <AirFlow>
           <AirFlowIcon />
-          {w.windSpeed} m/h{" "}
+          {windSpeed} m/h{" "}
         </AirFlow>
         <Rain>
           <RainIcon />
-          {w.PoP}%{" "}
+          {PoP}%{" "}
         </Rain>
-        <Refresh onClick={fetchCurrentWeather}>
+        <Refresh onClick={fetchCurrentWeather} Loading={isLoading}>
           {" "}
-          最後觀測時間：{w.ObTime}
+          最後觀測時間：{ObTime}
           <RefreshIcon />{" "}
         </Refresh>
       </WeatherCard>
