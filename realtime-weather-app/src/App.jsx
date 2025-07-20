@@ -6,6 +6,7 @@ import DayCloudyIcon from "./images/day-cloudy.svg?react";
 import RefreshIcon from "./images/refresh.svg?react";
 import AirFlowIcon from "./images/airFlow.svg?react";
 import RainIcon from "./images/rain.svg?react";
+import { jsx } from "react/jsx-runtime";
 
 const Container = styled.div`
 background-color: #ededed; 
@@ -143,26 +144,66 @@ const theme = {
 const ContainerX = styled(Container)`
   background-color : ${({theme:{backgroundColor}})=> backgroundColor}
 `
+const auth = 'CWA-6223B667-3D20-4930-B865-47C2562798D1'
 
+const oriData = {
+locationName: 'Taipei',
+weather: '不支倒ˋ',
+windSpeed: 'unkown',
+airTemperature: 'kk',
+description:'描述氣溫?',
+PoP: 100,
+ObTime: '上午 12：03'
 
-// ${p=>p.theme === 'dark'? theme.dark: theme.light}
-
+  }
 
 function App() {
 
-  const [t,setT] = useState('dark')
 
-  console.log(t)
+const pull = async ()=>{
+
+  const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${auth}&StationName=%E8%87%BA%E5%8C%97`);
+
+  const result = await response.json();
+
+
+  const {records:{Station:{0:{ObsTime:{DateTime},GeoInfo:{CountyName},WeatherElement:{
+
+    AirTemperature,Weather,WindSpeed   
+
+  }}}}} = result
+
+  // console.log(result);
+
+
+ let newData =  {...oriData,
+    locationName: CountyName,
+weather: Weather,
+windSpeed: WindSpeed,
+airTemperature: Math.round(AirTemperature), 
+ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3)  
+
+  } 
+
+
+  setW({...newData})
+
+}
+
+
+  const [t,setT] = useState('dark')
+  const [w,setW] = useState(oriData)
+ 
 
   return (
     <ThemeProvider theme={theme[t]}>
     <ContainerX >
       <WeatherCard>
-        <Location>台北市</Location>
-        <Description>多雲時晴</Description>
+        <Location>{w.locationName}</Location>
+        <Description>{w.description}</Description>
         <CurrentWeather>
           <Temperature>
-            23F
+            {w.airTemperature}
             <Celsius>°C</Celsius>
           </Temperature>
 
@@ -170,15 +211,15 @@ function App() {
         </CurrentWeather>
         <AirFlow>
           <AirFlowIcon />
-          23 m/h{" "}
+          {w.windSpeed} m/h{" "}
         </AirFlow>
         <Rain>
           <RainIcon />
-          48%{" "}
+          {w.PoP}%{" "}
         </Rain>
-        <Refresh>
+        <Refresh onClick={pull}>
           {" "}
-          最後觀測時間：上午 12：03
+          最後觀測時間：{w.ObTime}
           <RefreshIcon />{" "}
         </Refresh>
       </WeatherCard>
