@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "normalize.css";
 import styled from "@emotion/styled";
 import { ThemeProvider } from "@emotion/react";
@@ -7,6 +7,7 @@ import RefreshIcon from "./images/refresh.svg?react";
 import AirFlowIcon from "./images/airFlow.svg?react";
 import RainIcon from "./images/rain.svg?react";
 import { jsx } from "react/jsx-runtime";
+
 
 const Container = styled.div`
 background-color: #ededed; 
@@ -159,8 +160,9 @@ ObTime: '上午 12：03'
 
 function App() {
 
+console.log('invoke function component')
 
-const pull = async ()=>{
+const fetchCurrentWeather = async ()=>{
 
   const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${auth}&StationName=%E8%87%BA%E5%8C%97`);
 
@@ -193,12 +195,21 @@ ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3)
 
   const [t,setT] = useState('dark')
   const [w,setW] = useState(oriData)
- 
+  
+  useEffect(()=>{
+    
+    fetchCurrentWeather();
+
+    console.log('useEffect functioin')
+  
+  },[])
+
 
   return (
     <ThemeProvider theme={theme[t]}>
     <ContainerX >
       <WeatherCard>
+        {console.log('return component')}
         <Location>{w.locationName}</Location>
         <Description>{w.description}</Description>
         <CurrentWeather>
@@ -217,14 +228,15 @@ ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3)
           <RainIcon />
           {w.PoP}%{" "}
         </Rain>
-        <Refresh onClick={pull}>
+        <Refresh onClick={fetchCurrentWeather}>
           {" "}
           最後觀測時間：{w.ObTime}
           <RefreshIcon />{" "}
         </Refresh>
       </WeatherCard>
     </ContainerX>
-    </ThemeProvider>
+    </ThemeProvider> 
+
   );
 }
 
