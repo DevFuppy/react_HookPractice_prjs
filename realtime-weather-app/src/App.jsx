@@ -162,17 +162,7 @@ const ContainerX = styled(Container)`
 `
 const auth = 'CWA-6223B667-3D20-4930-B865-47C2562798D1'
 
-const oriData = {
-locationName: '',
-weather: '',
-windSpeed: '',
-airTemperature: '',
-description:'',
-PoP: 0,
-ObTime: '上午 00：00',
-isLoading:true
-
-  }
+ 
 
 function App() {
 
@@ -184,7 +174,7 @@ const fetchCurrentWeather = async ()=>{
   const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${auth}&StationName=%E8%87%BA%E5%8C%97`);
 
   const result = await response.json();
-
+   
 
   const {records:{Station:{0:{ObsTime:{DateTime},GeoInfo:{CountyName},WeatherElement:{
 
@@ -192,15 +182,31 @@ const fetchCurrentWeather = async ()=>{
 
   }}}}} = result
 
-  // console.log(result);
+   
 
+  const response2 = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${auth}&locationName=%E8%87%BA%E5%8C%97%E5%B8%82`);
+
+  const {records:{location:{0:{weatherElement}}}} = await response2.json();
+ 
+   
+  const {CI:{parameterName:ci},PoP:{parameterName:pop},Wx:{parameterName:wx}} = weatherElement.reduce((pre,cur)=>{
+
+    if(["PoP","Wx","CI"].includes(cur.elementName))pre[cur.elementName] = cur.time[1].parameter
+
+  return pre
+
+  },{})
+
+ 
   setW(prev=>({...prev,
     locationName: CountyName,
 weather: Weather,
 windSpeed: WindSpeed,
 airTemperature: Math.round(AirTemperature), 
 ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3),  
-isLoading:false
+isLoading:false,
+description:ci ,
+PoP:pop,
   }))
 
   
@@ -209,15 +215,26 @@ isLoading:false
 
 
   const [t,setT] = useState('dark')
-  const [{
-locationName,
-weather,
-windSpeed,
-airTemperature,
-description,
-PoP,
-ObTime,isLoading
-  },setW] = useState(oriData)
+
+  const [{locationName,
+          weather,
+          windSpeed,
+          airTemperature,
+          description,
+          PoP,
+          ObTime,
+          isLoading} , setW] = useState({ locationName: '',
+                                          weather: '',
+                                          windSpeed: '',
+                                          airTemperature: '',
+                                          description:'',
+                                          PoP: 0,
+                                          ObTime: '上午 00：00',
+                                          isLoading:true })    
+          
+ 
+
+  
   
   useEffect(()=>{
     
