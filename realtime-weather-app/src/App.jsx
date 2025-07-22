@@ -61,7 +61,7 @@ const Celsius = styled.div`
 const AirFlow = styled.div`
   display: flex;
   align-items: center;
-  font-size: 16x;
+  font-size: 16px;
   font-weight: 300;
   color: ${({theme:{textColor}})=>textColor};
   margin-bottom: 20px;
@@ -162,14 +162,10 @@ const ContainerX = styled(Container)`
 `
 const auth = 'CWA-6223B667-3D20-4930-B865-47C2562798D1'
 
- 
-
-function App() {
 
 
 const fetchCurrentWeather = async ()=>{
-
-  setW(x=>({...x, isLoading:true}))
+ 
 
   const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${auth}&StationName=%E8%87%BA%E5%8C%97`);
 
@@ -182,7 +178,18 @@ const fetchCurrentWeather = async ()=>{
 
   }}}}} = result
 
-   
+  return { 
+    ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3),
+    locationName:CountyName,   
+    airTemperature:Math.round(AirTemperature) ,
+    weather:Weather,
+    windSpeed:WindSpeed
+  }
+  
+}
+
+
+  const fetchWeatherForecast = async ()=>{ 
 
   const response2 = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${auth}&locationName=%E8%87%BA%E5%8C%97%E5%B8%82`);
 
@@ -197,19 +204,27 @@ const fetchCurrentWeather = async ()=>{
 
   },{})
 
- 
-  setW(prev=>({...prev,
-    locationName: CountyName,
-weather: Weather,
-windSpeed: WindSpeed,
-airTemperature: Math.round(AirTemperature), 
-ObTime:new Date(DateTime).toLocaleTimeString().slice(0,-3),  
-isLoading:false,
-description:ci ,
-PoP:pop,
-  }))
+  return { comfortability:ci,PoP:pop
+    ,description:wx 
+  }
+}
 
-  
+
+
+
+function App() {
+
+
+
+const fetchMain = async()=>{
+
+  setW(x=>({...x, isLoading:true}))
+
+  const [curW,wForecast] = await Promise.all([fetchCurrentWeather(),fetchWeatherForecast()])
+    
+ 
+  setW(prev=>({...prev,...curW,...wForecast,isLoading:false }))
+ 
 
 }
 
@@ -223,23 +238,21 @@ PoP:pop,
           description,
           PoP,
           ObTime,
-          isLoading} , setW] = useState({ locationName: '',
+          isLoading,comfortability} , setW] = useState({ locationName: '',
                                           weather: '',
                                           windSpeed: '',
                                           airTemperature: '',
                                           description:'',
                                           PoP: 0,
                                           ObTime: '上午 00：00',
-                                          isLoading:true })    
+                                          isLoading:true,comfortability:'' })    
           
  
-
-  
   
   useEffect(()=>{
     
     
-    fetchCurrentWeather();
+   fetchMain();
 
  
   
@@ -251,7 +264,7 @@ PoP:pop,
     <ContainerX > 
       <WeatherCard>
         <Location>{locationName}</Location>
-        <Description>{description}</Description>
+        <Description>{description} {comfortability}</Description>
         <CurrentWeather>
           <Temperature>
             {airTemperature}
@@ -268,7 +281,7 @@ PoP:pop,
           <RainIcon />
           {PoP}%{" "}
         </Rain>
-        <Refresh onClick={fetchCurrentWeather} Loading={isLoading}>
+        <Refresh onClick={fetchMain} Loading={isLoading}>
           {" "}
           最後觀測時間：{ObTime}
           <RefreshIcon />{" "}
