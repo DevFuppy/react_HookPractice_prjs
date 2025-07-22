@@ -9,6 +9,7 @@ import RainIcon from "./images/rain.svg?react";
 import { jsx } from "react/jsx-runtime";
 
 
+
 const Container = styled.div`
 background-color: #ededed; 
   height: 100%;
