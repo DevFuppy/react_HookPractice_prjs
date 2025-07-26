@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "normalize.css";
 import styled from "@emotion/styled";
 import { ThemeProvider } from "@emotion/react";
@@ -190,7 +190,7 @@ const fetchCurrentWeather = async ()=>{
 }
 
 
-  const fetchWeatherForecast = async ()=>{ 
+  const fetchWeatherForecast =  async ()=>{ 
 
   const response2 = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${auth}&locationName=%E8%87%BA%E5%8C%97%E5%B8%82`);
 
@@ -212,12 +212,11 @@ const fetchCurrentWeather = async ()=>{
 
 
 
-
 function App() {
 
 
 
-const fetchMain = async()=>{
+const fetchMain = useCallback( async()=>{
 
   setW(x=>({...x, isLoading:true}))
 
@@ -227,7 +226,7 @@ const fetchMain = async()=>{
   setW(prev=>({...prev,...curW,...wForecast,isLoading:false }))
  
 
-}
+},[])
 
 
   const [t,setT] = useState('dark')
@@ -248,8 +247,7 @@ const fetchMain = async()=>{
                                           ObTime: '上午 00：00',
                                           isLoading:true,comfortability:'' })    
           
- 
-  
+   
   useEffect(()=>{
     
     
@@ -257,7 +255,7 @@ const fetchMain = async()=>{
 
  
   
-  },[])
+  },[fetchMain])
 
 
   return (
