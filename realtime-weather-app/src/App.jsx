@@ -2,11 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import "normalize.css";
 import styled from "@emotion/styled";
 import { ThemeProvider } from "@emotion/react";
-import DayCloudyIcon from "./images/day-cloudy.svg?react";
 import RefreshIcon from "./images/refresh.svg?react";
 import AirFlowIcon from "./images/airFlow.svg?react";
 import RainIcon from "./images/rain.svg?react";
-import { jsx } from "react/jsx-runtime";
+import WeatherIcon from "./components/weatherIcon";
 
 
 
@@ -131,11 +130,6 @@ const Refresh = styled.div`
 
 `;
 
-const DayCloudy = styled(DayCloudyIcon)`
-
- flex-basis: 30%
-
-`;
 
 
 const theme = {
@@ -170,7 +164,7 @@ const fetchCurrentWeather = async ()=>{
 
   const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${auth}&StationName=%E8%87%BA%E5%8C%97`);
 
-  const result = await response.json();
+  const result = await response.json();   /*console.log(result)*/
    
 
   const {records:{Station:{0:{ObsTime:{DateTime},GeoInfo:{CountyName},WeatherElement:{
@@ -194,19 +188,30 @@ const fetchCurrentWeather = async ()=>{
 
   const response2 = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${auth}&locationName=%E8%87%BA%E5%8C%97%E5%B8%82`);
 
-  const {records:{location:{0:{weatherElement}}}} = await response2.json();
- 
-   
-  const {CI:{parameterName:ci},PoP:{parameterName:pop},Wx:{parameterName:wx}} = weatherElement.reduce((pre,cur)=>{
+   const data =  await response2.json();
 
-    if(["PoP","Wx","CI"].includes(cur.elementName))pre[cur.elementName] = cur.time[1].parameter
+  //  console.log(data);
+
+   const {records:{location:{0:{weatherElement}}}} = data;
+ 
+     
+  const {
+    CI:{parameterName:comfortability },
+    PoP:{parameterName:PoP},
+    Wx:{parameterName:description , parameterValue:weatherCode}
+        } = weatherElement.reduce((pre,cur)=>{
+
+    if(["PoP","Wx","CI"].includes(cur.elementName))pre[cur.elementName] = cur.time[0].parameter
 
   return pre
 
-  },{})
+  },{}) 
 
-  return { comfortability:ci,PoP:pop
-    ,description:wx 
+  return { 
+    comfortability,
+    PoP,
+    description, 
+    weatherCode
   }
 }
 
@@ -225,6 +230,7 @@ const fetchMain = useCallback( async()=>{
  
   setW(prev=>({...prev,...curW,...wForecast,isLoading:false }))
  
+  // setT(new Date().getHours())new Date().getHours()
 
 },[])
 
@@ -232,14 +238,14 @@ const fetchMain = useCallback( async()=>{
   const [t,setT] = useState('dark')
 
   const [{locationName,
-          weather,
+          weatherCode,
           windSpeed,
           airTemperature,
           description,
           PoP,
           ObTime,
           isLoading,comfortability} , setW] = useState({ locationName: '',
-                                          weather: '',
+                                          weatherCode: '',
                                           windSpeed: '',
                                           airTemperature: '',
                                           description:'',
@@ -269,8 +275,7 @@ const fetchMain = useCallback( async()=>{
             {airTemperature}
             <Celsius>°C</Celsius>
           </Temperature>
-
-          <DayCloudy />
+          <WeatherIcon weatherCode={weatherCode} />
         </CurrentWeather>
         <AirFlow>
           <AirFlowIcon />
