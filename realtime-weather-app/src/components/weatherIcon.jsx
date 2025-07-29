@@ -13,6 +13,7 @@ import NightFog from "./../images/night-fog.svg?react";
 import NightPartiallyClearWithRain from "./../images/night-partially-clear-with-rain.svg?react";
 import NightSnowing from "./../images/night-snowing.svg?react";
 import NightThunderstorm from "./../images/night-thunderstorm.svg?react";
+import { useMemo } from "react";
 
 const IconContainer = styled.div`
   flex-basis: 30%;
@@ -55,17 +56,18 @@ const weatherIcons = {
   },
 };
 
-
-const WeatherIcon = ({weatherCode}) => {
-
-  const [theType] = Object.entries(weatherTypes).find(([,codes])=>codes
+const getWeatherType = (weatherCode) =>Object.entries(weatherTypes).find(([,codes])=>codes
     
-    .includes(Number(weatherCode))) || []
-  
+    .includes(Number(weatherCode))) || [] 
+
+    
+const WeatherIcon = ({weatherCode,moment}) => {
+
+  const [theType] = useMemo( ()=>getWeatherType(weatherCode),[weatherCode])   
   
    return (
     <IconContainer>
-       {weatherIcons.night[theType]}
+       {weatherIcons[moment][theType]}
     </IconContainer>
   );
 

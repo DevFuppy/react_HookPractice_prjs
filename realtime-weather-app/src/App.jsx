@@ -221,7 +221,7 @@ function App() {
 
 
 
-const fetchMain = useCallback( async()=>{
+const fetchMain = useCallback(async()=>{
 
   setW(x=>({...x, isLoading:true}))
 
@@ -230,9 +230,20 @@ const fetchMain = useCallback( async()=>{
  
   setW(prev=>({...prev,...curW,...wForecast,isLoading:false }))
  
-  // setT(new Date().getHours())new Date().getHours()
+ },[])
 
-},[])
+//  //forTesting useCallback
+//  if(ggg===20)
+//  {
+//    ggg = fetchMain
+//    console.log('ggg初始化: ',ggg)
+//  }
+//  else
+//  {
+//   console.log('已給過ggg')
+//   bbb = fetchMain
+//   console.log('兩次渲染fetchMain參照相同嗎?', ggg === bbb )
+//  }
 
 
   const [t,setT] = useState('dark')
@@ -275,7 +286,7 @@ const fetchMain = useCallback( async()=>{
             {airTemperature}
             <Celsius>°C</Celsius>
           </Temperature>
-          <WeatherIcon weatherCode={weatherCode} />
+          <WeatherIcon weatherCode={weatherCode} moment={'night'} />
         </CurrentWeather>
         <AirFlow>
           <AirFlowIcon />
