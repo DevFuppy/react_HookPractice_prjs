@@ -63,8 +63,9 @@ const getWeatherType = (weatherCode) =>Object.entries(weatherTypes).find(([,code
     
 const WeatherIcon = ({weatherCode,moment}) => {
 
-  const [theType] = useMemo( ()=>getWeatherType(weatherCode),[weatherCode])   
-  
+  const [theType] = useMemo( ()=>getWeatherType(weatherCode),[weatherCode])    
+ 
+
    return (
     <IconContainer>
        {weatherIcons[moment][theType]}

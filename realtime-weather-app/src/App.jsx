@@ -220,7 +220,8 @@ function App() {
   //   console.log('兩次渲染fetchMain參照相同嗎?', ggg === bbb )
   //  }
 
-  const [t, setT] = useState("dark");
+  //lazy init for useState
+  const [t, setT] = useState(()=>getMoment("臺北市"));
 
   const [
     {
@@ -245,9 +246,7 @@ function App() {
     ObTime: "上午 00：00",
     isLoading: true,
     comfortability: "",
-  });
-
-  const dayOrNight = useMemo(() => getMoment("臺北市"), [ObTime]);
+  }); 
 
   const fetchMain = useCallback(async () => {
     setW((x) => ({ ...x, isLoading: true }));
@@ -261,12 +260,14 @@ function App() {
   }, []);
 
   useEffect(() => {
+
     fetchMain();
-    setT(dayOrNight === "day" ? "light" : "dark");
-  }, [fetchMain,dayOrNight]);
+   
+  }, [fetchMain]);
+ 
 
   return (
-    <ThemeProvider theme={theme[t]}>
+    <ThemeProvider theme={theme[t === "day" ? "light" : "dark"]}>
       <ContainerX>
         <WeatherCard>
           <Location>{locationName}</Location>
@@ -278,7 +279,7 @@ function App() {
               {airTemperature}
               <Celsius>°C</Celsius>
             </Temperature>
-            <WeatherIcon weatherCode={weatherCode} moment={dayOrNight} />
+            <WeatherIcon weatherCode={weatherCode} moment={t} />
           </CurrentWeather>
           <AirFlow>
             <AirFlowIcon />
@@ -291,7 +292,7 @@ function App() {
           <Refresh
             onClick={() => {
               fetchMain();
-              setT(() => getMoment("臺北市") === "day" ? "light" : "dark");
+              setT( x=> x === getMoment("臺北市")? x : getMoment("臺北市") );
             }}
             Loading={isLoading}
           >
