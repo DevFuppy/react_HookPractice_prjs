@@ -118,7 +118,8 @@ const WeatherSetting = ({ setLocation, pageSwitcher }) => {
         </Back>
         <Save onClick={() => {
           
-          setLocation(setLocationValue)
+          setLocation(setLocationValue);
+          localStorage.setItem('locName',setLocationValue)
           pageSwitcher('weatherCard')
           
           }}>
