@@ -2,7 +2,11 @@ import styled from "@emotion/styled";
 import RefreshIcon from "../images/refresh.svg?react";
 import AirFlowIcon from "../images/airFlow.svg?react";
 import RainIcon from "../images/rain.svg?react";
+import CogIcon from '../images/cog.svg?react'
+
 import WeatherIcon from "../components/weatherIcon";
+
+
 
 const WeatherCardWrapper = styled.div`
   position: relative;
@@ -73,7 +77,15 @@ const Rain = styled.div`
   }
 `;
 
-//Q: SVG直接等於一類DOM嗎? 為何可以直接這樣寫?
+const Cog = styled(CogIcon)`
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+`;
+
 const Refresh = styled.div`
   position: absolute;
   right: 15px;
@@ -118,12 +130,14 @@ function WeatherCard({
   setT,
   t,
   getMoment,
+  pageSwitcher
 }) {
   return (
-    <WeatherCardWrapper>
-      <Location>{locationName}</Location>
+    <WeatherCardWrapper><Cog onClick={()=>{pageSwitcher('weatherSetting')}} />  
+      <Location>{locationName}</Location>    
       <Description>
-        {description} {comfortability}
+        {/* {description} */}
+         {comfortability}
       </Description>
       <CurrentWeather>
         <Temperature>
@@ -143,7 +157,7 @@ function WeatherCard({
       <Refresh
         onClick={() => {
           fetchMain();
-          setT((x) => (x === getMoment("臺北市") ? x : getMoment("臺北市")));
+          setT((x) => (x === getMoment(locationName) ? x : getMoment(locationName)));
         }}
         Loading={isLoading}
       >

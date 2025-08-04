@@ -1,10 +1,11 @@
-import { useState} from "react";
+import { useState, useMemo} from "react";
 import useWeatherAPI from "./hooks/useWeatherAPI"
 import "normalize.css";
 import styled from "@emotion/styled";
 import { ThemeProvider } from "@emotion/react";
-import { getMoment } from "./utils/helpers";
+import { getMoment , getLocation } from "./utils/helpers";
 import WeatherCard from "./views/WeatherCard";
+import WeatherSetting from "./views/WeatherSetting";
 
 
 const Container = styled.div`
@@ -40,27 +41,37 @@ const ContainerX = styled(Container)`
 `;
 
 const auth = "CWA-6223B667-3D20-4930-B865-47C2562798D1";
-const StationName ='臺北';
-const locationName = '臺北市'
+
 
 function App() {
+
+  const [page,pageSwitcher] = useState('weatherCard')
+
+  const [inputLocation, setLocation] = useState('臺北市')
+ 
+  const {locationName:StationName, sunriseCityName:locationName} = useMemo(()=>getLocation(inputLocation),[inputLocation])
 
   //lazy init for useState
   const [t, setT] = useState(()=>getMoment(locationName));
 
-  const [weatherData,fetchMain] = useWeatherAPI(auth,StationName,locationName);
+  const [weatherData,fetchMain] = useWeatherAPI(auth,StationName,locationName);  
 
 
   return (
     <ThemeProvider theme={theme[t === "day" ? "light" : "dark"]}>
       <ContainerX>
-        <WeatherCard 
+        
+        {page === 'weatherCard' && <WeatherCard 
           weatherData={weatherData} 
           fetchMain={fetchMain}
           setT={setT}
           t={t}
           getMoment={getMoment}
-          />
+          pageSwitcher = {pageSwitcher}
+          /> }
+
+        { page === 'weatherSetting' && <WeatherSetting setLocation={setLocation} pageSwitcher={pageSwitcher} /> }
+
       </ContainerX>
     </ThemeProvider>
   );
