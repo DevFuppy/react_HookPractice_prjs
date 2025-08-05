@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/react_HookPractice_prjs/sw.js', { scope: '/react_HookPractice_prjs/' })})}
