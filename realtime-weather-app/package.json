@@ -1,5 +1,4 @@
 {
-  "name": "realtime-weather-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +6,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy":"npm run build",
+    "deploy":"gh-pages -d dist -b gh-pages"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
