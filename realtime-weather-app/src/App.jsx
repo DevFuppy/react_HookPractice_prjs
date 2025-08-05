@@ -48,7 +48,7 @@ function App() {
   const [page,pageSwitcher] = useState('weatherCard')
 
   const [inputLocation, setLocation] = useState(localStorage.getItem('locName')||'臺北市')
- 
+
   const {locationName:StationName, sunriseCityName:locationName} = useMemo(()=>getLocation(inputLocation),[inputLocation])
 
   //lazy init for useState
