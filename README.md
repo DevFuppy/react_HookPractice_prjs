@@ -25,3 +25,8 @@
   4. npm run deploy
   5. Go to github->your repo-> branch: gh-pages -> setting on the up-right corner (cog icon) -> pages -> Folder : root
   6. url: https://<你的帳號>.github.io/<你的 repo 名稱>/
+
+- Basic PWA (only for dowloading)
+  1. npm i -D vite-plugin-pwa 
+  2. vite.config.js -> plugins: -> VitePWA -> ({manifest:...
+  3. deply
