@@ -26,7 +26,7 @@ const fetchCurrentWeather = async (auth,station) => {
   } = result;
 
   return {
-    ObTime: new Date(DateTime).toLocaleTimeString().slice(0, -3),
+    ObTime: new Intl.DateTimeFormat("zh-tw",{hour:'numeric',minute:'numeric'}).format(new Date(DateTime)),
     locationName: CountyName,
     airTemperature: Math.round(AirTemperature),
     weather: Weather,
