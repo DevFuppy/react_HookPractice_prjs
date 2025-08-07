@@ -70,7 +70,7 @@ function App() {
           pageSwitcher = {pageSwitcher}
           /> }
 
-        { page === 'weatherSetting' && <WeatherSetting setLocation={setLocation} pageSwitcher={pageSwitcher} /> }
+        { page === 'weatherSetting' && <WeatherSetting currentLoc={inputLocation} setLocation={setLocation} pageSwitcher={pageSwitcher} /> }
 
       </ContainerX>
     </ThemeProvider>

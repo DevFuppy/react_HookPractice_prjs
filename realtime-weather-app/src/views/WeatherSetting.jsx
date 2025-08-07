@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { availableLocations } from "../utils/helpers.jsx";
-import { useRef } from "react";
+import { useEffect, useRef , useState } from "react";
 
 const WeatherSettingWrapper = styled.div`
   position: relative;
@@ -93,18 +93,19 @@ const Save = styled.button`
   }
 `;
 
-const WeatherSetting = ({ setLocation, pageSwitcher }) => {
-  
-  let setLocationValue;
+const WeatherSetting = ({ setLocation, pageSwitcher,currentLoc }) => {
+   
+
+  const [tempLocation,setCurrentLoc] = useState(currentLoc)  
 
   return (
     <WeatherSettingWrapper>
       <Title>設定</Title>
       <StyledLabel htmlFor="location">地區</StyledLabel>
 
-      <StyledSelect id="location" name="location" onChange={(e)=>setLocationValue=e.target.value}>
+      <StyledSelect id="location" name="location" value={tempLocation} onChange={(e)=>setCurrentLoc(e.target.value)}>
         {
-        availableLocations.map((x) => (<option>{x.cityName}</option>))
+        availableLocations.map((x) => (<option key={x.cityName}>{x.cityName}</option>))
         }
       </StyledSelect>
 
@@ -118,8 +119,8 @@ const WeatherSetting = ({ setLocation, pageSwitcher }) => {
         </Back>
         <Save onClick={() => {
           
-          setLocation(setLocationValue);
-          localStorage.setItem('locName',setLocationValue)
+          setLocation(tempLocation)
+          localStorage.setItem('locName',tempLocation)      
           pageSwitcher('weatherCard')
           
           }}>
