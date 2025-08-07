@@ -6,6 +6,39 @@
     - import { ThemeProvider } from "@emotion/react";
         - `<ThemeProvider theme={theme}>` (only accept object)
 
+- Fontawesome
+    - install :
+        ```
+         $ npm i --save @fortawesome/fontawesome-svg-core @fortawesome/react-fontawesome @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons @fortawesome/free-solid-svg-icons
+        ```
+
+    - Top-layer-module :     
+       ```js    
+       // App.js
+       import { library } from '@fortawesome/fontawesome-svg-core';
+       import { fab } from '@fortawesome/free-brands-svg-icons';
+       import { fas } from '@fortawesome/free-solid-svg-icons';
+       import { far } from '@fortawesome/free-regular-svg-icons';
+       
+       library.add(fab, fas, far);   
+       ```
+    - When using in component layers: 
+       ```js
+       import React from 'react';
+        // STEP 1：在想要使用圖示的地方匯入 React FontAwesome
+        import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+        export const Gadget = () => (
+          <div>
+            {/* STEP 2：套用 FontAwesome 提供的 microsoft 圖示} */}
+            <FontAwesomeIcon icon={['fab', 'microsoft']} />
+          </div>
+        );
+       ```    
+ 
+
+
+
 - importing SVG as components needs to install plugin
     - SVGR: 
         - npm install -D vite-plugin-svgr
